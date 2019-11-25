@@ -18,18 +18,18 @@ KW_Widget * CalculateMouseOver(KW_Widget * widget, int x, int y) {
     g.y += widget->parent->absolute.y;
   }
   /* mouseover is a input event, avoid calculating it */
-  if (KW_IsWidgetInputEventsBlocked(widget) || KW_IsWidgetHidden(widget)) {
+  if (KW_IsWidgetInputEventsBlocked(widget) || KW_IsWidgetHidden(widget) || !widget || !widget->gui) {
     return NULL;
   }
-  
+
   /* if not in composed geometry, nothing to see here then. rootwidget always borked. */
-  if (!(x > g.x && x < g.x + g.w && y > g.y && y < g.y + g.h) && widget != widget->gui->rootwidget) { 
+  if (!(x > g.x && x < g.x + g.w && y > g.y && y < g.y + g.h) && widget != widget->gui->rootwidget) {
     return NULL;
   }
-  
+
   for (i = widget->childrencount-1; i >= 0 && found == NULL; i--)
     found = CalculateMouseOver(widget->children[i], x, y);
-  
+
   /* children don't have it. Maybe its this widget then? */
   if (found == NULL) {
     g = widget->absolute;
@@ -126,9 +126,9 @@ void KeyDown(KW_GUI * gui, SDL_Keycode key, SDL_Scancode scan) {
 /* to capture mouse movements, clicks, types, etc */
 int KW_EventWatcher(void * data, SDL_Event * event) {
   KW_GUI * gui = (KW_GUI *) data;
-  SDL_LockMutex(gui->evqueuelock);    
+  SDL_LockMutex(gui->evqueuelock);
   gui->evqueue[(gui->evqueuesize)++] = *event;
-  SDL_UnlockMutex(gui->evqueuelock);  
+  SDL_UnlockMutex(gui->evqueuelock);
   return 0;
 }
 
@@ -145,24 +145,24 @@ void KW_ProcessEvents(KW_GUI * gui) {
       case SDL_MOUSEBUTTONDOWN:
         MousePressed(gui, event->button.x, event->button.y, event->button.button);
         break;
-        
+
       case SDL_MOUSEBUTTONUP:
         MouseReleased(gui, event->button.x, event->button.y, event->button.button);
         break;
-        
+
       case SDL_TEXTINPUT:
         TextInputReady(gui, event->text.text);
         break;
-        
+
       case SDL_TEXTEDITING:
         break;
-        
+
       case SDL_KEYDOWN:
         KeyDown(gui, event->key.keysym.sym, event->key.keysym.scancode);
         break;
       case SDL_KEYUP:
         KeyUp(gui, event->key.keysym.sym, event->key.keysym.scancode);
-        break;      
+        break;
       default:
         break;
     }
