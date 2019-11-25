@@ -12,17 +12,17 @@
 void dump(const char infile[], FILE * hfile, FILE * cfile);
 int make_identifier(const char string[], char output[], size_t output_size);
 
-int main(int argc, char * argv[]) {
-  unsigned i = 0;
-  FILE * cfile, * hfile;
-  if (argc < 4) return EXIT_FAILURE;
-  hfile = fopen(argv[1], "w+");
-  cfile = fopen(argv[2], "w+");
-  for (i = 3; i < argc; i++) dump(argv[i], hfile, cfile);
-  fclose(cfile);
-  fclose(hfile);
-  return 0;
-}
+// int main(int argc, char * argv[]) {
+//   unsigned i = 0;
+//   FILE * cfile, * hfile;
+//   if (argc < 4) return EXIT_FAILURE;
+//   hfile = fopen(argv[1], "w+");
+//   cfile = fopen(argv[2], "w+");
+//   for (i = 3; i < argc; i++) dump(argv[i], hfile, cfile);
+//   fclose(cfile);
+//   fclose(hfile);
+//   return 0;
+// }
 
 void dump(const char filename[], FILE * hfile, FILE * cfile) {
   FILE * infile = fopen(filename, "rb");
