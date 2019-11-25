@@ -12,13 +12,16 @@
 KW_Widget * CalculateMouseOver(KW_Widget * widget, int x, int y) {
   int i;
   KW_Widget * found = NULL;
+  if (!widget || !widget->gui) {
+    return NULL;
+  }
   KW_Rect g = widget->composed;
   if (widget->parent) {
     g.x += widget->parent->absolute.x;
     g.y += widget->parent->absolute.y;
   }
   /* mouseover is a input event, avoid calculating it */
-  if (KW_IsWidgetInputEventsBlocked(widget) || KW_IsWidgetHidden(widget) || !widget || !widget->gui) {
+  if (KW_IsWidgetInputEventsBlocked(widget) || KW_IsWidgetHidden(widget)) {
     return NULL;
   }
 

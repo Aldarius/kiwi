@@ -250,6 +250,8 @@ void KW_SetFocusedWidget(KW_Widget * widget)
     if (gui->currentfocus != NULL) {
       count = gui->currentfocus->eventhandlers[KW_ON_FOCUSLOSE].count;
       losehandlers = (KW_OnFocusLose *) gui->currentfocus->eventhandlers[KW_ON_FOCUSLOSE].handlers;
+      if (!losehandlers || !gui->currentfocus)
+        return ;
       for (i = 0; i < count; i++) {
         losehandlers[i](gui->currentfocus);
       }
